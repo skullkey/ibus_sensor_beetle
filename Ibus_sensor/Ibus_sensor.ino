@@ -8,7 +8,8 @@ IBusBM IBus;
 
 Adafruit_BMP085 bmp;
 
-#define FILTER_N 7
+#define FILTER_N 8
+#define ALPHA 0.9
 MedianFilter2<double> medianFilter(FILTER_N);
 
 
@@ -113,7 +114,7 @@ void update_state(){
 void loop() {
   double alt_t = bmp.readAltitude();
   double median = medianFilter.AddValue(alt_t);
-  alt = alt * 0.95 +median * 0.05;
+  alt = alt * ALPHA +median * (1-ALPHA);
   /*Serial.print(millis());
   Serial.print(",");
   Serial.print(alt_t);
